@@ -6,7 +6,12 @@ namespace DotNetCoreWebAPI.Data
 {
 	public class ApplicationDbContext : DbContext
 	{
-		public DbSet<Shirt> Shirts { get; set; }
+        public ApplicationDbContext(DbContextOptions options) : base(options)
+        {
+            
+        }
+
+        public DbSet<Shirt> Shirts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
