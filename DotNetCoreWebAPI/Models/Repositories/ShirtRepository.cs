@@ -41,5 +41,24 @@
 
             shirts.Add(shirt);
         }
+
+        public static void UpdateShirt(Shirt shirt)
+        {
+            var shirtToUpdate = shirts.FirstOrDefault(x => x.Id == shirt.Id);
+            shirtToUpdate.Brand = shirt.Brand;
+            shirtToUpdate.Price = shirt.Price;
+            shirtToUpdate.Size = shirt.Size;
+            shirtToUpdate.Color = shirt.Color;
+            shirtToUpdate.Gender = shirt.Gender;
+        }
+
+        public static void DeleteShirt(int id)
+        {
+            var shirt = GetShirtById(id);
+            if(shirt != null)
+            {
+                shirts.Remove(shirt);
+            }
+        }
     }
 }

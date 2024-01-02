@@ -1,4 +1,5 @@
 ﻿using DotNetCoreWebAPI.Filters;
+using DotNetCoreWebAPI.Filters.ExceptionFilters;
 using DotNetCoreWebAPI.Models;
 using DotNetCoreWebAPI.Models.Repositories;
 using Microsoft.AspNetCore.Http;
@@ -34,15 +35,24 @@ namespace DotNetCoreWebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateShirt(int id)
-        {
-            return Ok($"Shirt Updated");
+        [ValidateShirtIdFilter]
+        [ValidateUpdateShirtFilter]
+        [HandleUpdateExceptionsFilter]
+        public IActionResult UpdateShirt(int id, Shirt shirt)
+        {            
+            ShirtRepository.UpdateShirt(shirt);
+
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
+        [ValidateShirtIdFilter]
         public IActionResult DeleteShirt(int id)
         {
-            return Ok($"Shirt Deleted");
+            var shirt = ShirtRepository.GetShirtById(id);
+            ShirtRepository.DeleteShirt(id);
+
+            return Ok(shirt);
         }
     }
 }
