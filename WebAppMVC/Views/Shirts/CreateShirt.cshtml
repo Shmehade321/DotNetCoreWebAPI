@@ -1,0 +1,41 @@
+﻿@model Shirt
+@{
+    ViewData["Title"] = "Create Shirt Page";
+}
+
+<h3 class="display-3 text-center mb-3">Create Shirt</h3>
+<form method="post" asp-action="CreateShirt" asp-controller="Shirts">
+    <div class="text-danger" asp-validation-summary="All"></div>
+    <div class="mb-3">
+        <label asp-for="Brand" class="form-label">Brand</label>
+        <input type="text" class="form-control" asp-for="Brand" placeholder="Enter brand...">
+        <span class="text-danger" asp-validation-for="Brand"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Gender" class="form-label">Gender</label>
+        <select asp-for="Gender" class="form-select">
+            <option value="">-- Select Gender --</option>
+            <option value="women">Women</option>
+            <option value="men">Men</option>
+        </select>
+        <span class="text-danger" asp-validation-for="Gender"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Color" class="form-label">Color</label>
+        <input type="text" class="form-control" asp-for="Color" placeholder="Enter color...">
+        <span class="text-danger" asp-validation-for="Color"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Size" class="form-label">Size</label>
+        <input type="number" class="form-control" asp-for="Size" min="1" placeholder="Enter size...">
+        <span class="text-danger" asp-validation-for="Size"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Price" class="form-label">Price</label>
+        <input type="number" class="form-control" asp-for="Price" placeholder="Enter price...">
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Create Shirt</button>
+        <a class="btn btn-secondary" asp-controller="Shirts" asp-action="Index"><i class="fa-solid fa-arrow-left"></i> Go back</a>
+    </div>
+</form>
