@@ -5,7 +5,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<ApplicationDbContext>(opt => 
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("ShirtStoreManagement")));
+    //opt.UseSqlServer(builder.Configuration.GetConnectionString("ShirtStoreManagement"))
+    opt.UseNpgsql(builder.Configuration.GetConnectionString("ShirtStoreManagement"))
+);
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
