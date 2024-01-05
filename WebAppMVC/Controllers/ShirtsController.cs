@@ -29,10 +29,17 @@ namespace WebAppMVC.Controllers
         {
             if(ModelState.IsValid)
             {
-                var response = await _webApiExecutor.InvokePost("shirts", shirt);
-                if (response != null)
+                try
                 {
-                    return RedirectToAction(nameof(Index));
+                    var response = await _webApiExecutor.InvokePost("shirts", shirt);
+                    if (response != null)
+                    {
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+                catch(WebApiException ex)
+                {
+                    HandleWebApiException(ex);            
                 }
             }
             return View(shirt);
@@ -40,13 +47,64 @@ namespace WebAppMVC.Controllers
 
         public async Task<IActionResult> UpdateShirt(int id)
         {
-            var shirt = await _webApiExecutor.InvokeGet<Shirt>($"shirts/{id}");
-            if (shirt != null)
+            try
             {
-                return View(shirt);
+                var shirt = await _webApiExecutor.InvokeGet<Shirt>($"shirts/{id}");
+                if (shirt != null)
+                {
+                    return View(shirt);
+                }
+            }
+            catch(WebApiException ex)
+            {
+                HandleWebApiException(ex);
+                return View();
             }
 
             return NotFound();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateShirt(Shirt shirt)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await _webApiExecutor.InvokePut($"shirts/{shirt.Id}", shirt);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(WebApiException ex)
+                {
+                    HandleWebApiException(ex);
+                }
+            }
+            return View(shirt);
+        }
+
+        public async Task<IActionResult> DeleteShirt(int id)
+        {
+           try
+            {
+                await _webApiExecutor.InvokeDelete($"shirts/{id}");
+                return RedirectToAction(nameof(Index));
+            }
+            catch(WebApiException ex)
+            {
+                HandleWebApiException(ex);
+                return View(nameof(Index), await _webApiExecutor.InvokeGet<List<Shirt>>("shirts"));
+            }
+        }
+
+        private void HandleWebApiException(WebApiException ex)
+        {
+            if(ex.ErrorResponse != null && ex.ErrorResponse.Errors != null && ex.ErrorResponse.Errors.Count > 0)
+            {
+                foreach(var error in ex.ErrorResponse.Errors)
+                {
+                    ModelState.AddModelError(error.Key, string.Join("; ", error.Value));
+                }
+            }
+        }   
     }
 }
