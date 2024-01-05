@@ -26,7 +26,7 @@
                 <td>@shirt.Size</td>
                 <td>@(shirt.Price.HasValue ? shirt.Price.Value.ToString("c") : "")</td>
                 <td>
-                    <a class="btn btn-sm btn-secondary"><i class="fa-solid fa-pencil"></i> Edit</a>
+                    <a class="btn btn-sm btn-secondary"><i class="fa-solid fa-pencil" asp-controller="shirts" asp-action="updateshirt"></i> Edit</a>
                     <a class="btn btn-sm btn-danger"><i class="fa-solid fa-trash"></i> Delete</a>
                 </td>
             </tr>

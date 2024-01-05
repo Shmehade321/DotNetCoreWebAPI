@@ -37,5 +37,16 @@ namespace WebAppMVC.Controllers
             }
             return View(shirt);
         }
+
+        public async Task<IActionResult> UpdateShirt(int id)
+        {
+            var shirt = await _webApiExecutor.InvokeGet<Shirt>($"shirts/{id}");
+            if (shirt != null)
+            {
+                return View(shirt);
+            }
+
+            return NotFound();
+        }
     }
 }
