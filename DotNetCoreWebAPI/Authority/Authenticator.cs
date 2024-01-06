@@ -50,6 +50,9 @@ namespace DotNetCoreWebAPI.Authority
         {
             if (string.IsNullOrWhiteSpace(token)) return false;
 
+            if (token.StartsWith("Bearer "))
+                token = token.Substring(6).Trim();
+
             var key = Encoding.ASCII.GetBytes(strSecretKey);
             SecurityToken validatedToken;
 
