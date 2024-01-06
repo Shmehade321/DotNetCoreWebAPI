@@ -1,5 +1,6 @@
 ﻿using DotNetCoreWebAPI.Data;
 using DotNetCoreWebAPI.Filters;
+using DotNetCoreWebAPI.Filters.AuthFilters;
 using DotNetCoreWebAPI.Filters.ExceptionFilters;
 using DotNetCoreWebAPI.Models;
 using DotNetCoreWebAPI.Models.Repositories;
@@ -10,6 +11,7 @@ namespace DotNetCoreWebAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [JwtTokenAuthFilter]
     public class ShirtsController : ControllerBase
     {
         private readonly ApplicationDbContext _db;
