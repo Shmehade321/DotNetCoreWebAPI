@@ -7,6 +7,7 @@ using System.Text;
 
 namespace DotNetCoreWebAPI.Controllers
 {
+    [ApiVersion("1.0")]
     [ApiController]
     public class AuthorityController : ControllerBase
     {

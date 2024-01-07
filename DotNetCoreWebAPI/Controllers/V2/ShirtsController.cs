@@ -1,6 +1,7 @@
 ﻿using DotNetCoreWebAPI.Attributes;
 using DotNetCoreWebAPI.Data;
 using DotNetCoreWebAPI.Filters;
+using DotNetCoreWebAPI.Filters.ActionFilters.V2;
 using DotNetCoreWebAPI.Filters.AuthFilters;
 using DotNetCoreWebAPI.Filters.ExceptionFilters;
 using DotNetCoreWebAPI.Models;
@@ -8,10 +9,10 @@ using DotNetCoreWebAPI.Models.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace DotNetCoreWebAPI.Controllers
+namespace DotNetCoreWebAPI.Controllers.V2
 {
     [ApiController]
-    [ApiVersion("1.0")]
+    [ApiVersion("2.0")]
     [Route("api/[controller]")]
     [JwtTokenAuthFilter]
     public class ShirtsController : ControllerBase
@@ -40,6 +41,7 @@ namespace DotNetCoreWebAPI.Controllers
 
         [HttpPost]
         [TypeFilter(typeof(ValidateCreateShirtFilterAttribute))]
+        [EnsureDescriptionIsPresentFilter]
         [RequiredClaim("write", "true")]
         public IActionResult CreateShirt([FromBody] Shirt shirt)
         {
@@ -53,11 +55,13 @@ namespace DotNetCoreWebAPI.Controllers
         [TypeFilter(typeof(ValidateShirtIdFilterAttribute))]
         [ValidateUpdateShirtFilter]
         [TypeFilter(typeof(HandleUpdateExceptionsFilterAttribute))]
+        [EnsureDescriptionIsPresentFilter]
         [RequiredClaim("write", "true")]
         public IActionResult UpdateShirt(int id, Shirt shirt)
         {
             var shirtToUpdate = HttpContext.Items["shirt"] as Shirt;
             shirtToUpdate.Brand = shirt.Brand;
+            shirtToUpdate.Description = shirt.Description;
             shirtToUpdate.Price = shirt.Price;
             shirtToUpdate.Size = shirt.Size;
             shirtToUpdate.Color = shirt.Color;

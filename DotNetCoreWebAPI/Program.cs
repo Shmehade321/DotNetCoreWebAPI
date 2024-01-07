@@ -1,5 +1,7 @@
 using DotNetCoreWebAPI.Data;
 using DotNetCoreWebAPI.Filters.OperationFilters;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 
@@ -12,10 +14,22 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt =>
 );
 
 builder.Services.AddControllers();
+
+builder.Services.AddApiVersioning(options =>
+{
+    options.ReportApiVersions = true;
+    options.AssumeDefaultVersionWhenUnspecified = true;
+    options.DefaultApiVersion = new ApiVersion(1, 0);
+    //options.ApiVersionReader = new HeaderApiVersionReader("X-API-Version");
+}).AddMvc();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV");
 builder.Services.AddSwaggerGen(c =>
 {
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Shirt Store Management API", Version = "v1" });
+    c.SwaggerDoc("v2", new OpenApiInfo { Title = "Shirt Store Management API", Version = "v2" });
+
     c.OperationFilter<AuthorizationHeaderOperationFilter>();
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -34,7 +48,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Shirt Store Management API v1");
+        options.SwaggerEndpoint("/swagger/v2/swagger.json", "Shirt Store Management API v2");
+    });
 }
 
 app.UseHttpsRedirection();
