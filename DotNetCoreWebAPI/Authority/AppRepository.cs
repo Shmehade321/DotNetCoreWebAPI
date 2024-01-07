@@ -10,7 +10,7 @@
                 ApplicationName = "MVCWebApp",
                 ClientId = "A8D21EE0-73B8-4B8A-8DA0-C0F6410B4ECB",
                 Secret = "CAE7E8BE-95D6-429B-9C81-3780B086A276",
-                Scopes = "read,write"
+                Scopes = "read,write,delete"
             }
         };
 
